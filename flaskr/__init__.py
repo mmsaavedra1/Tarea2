@@ -27,4 +27,17 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
+    # Create routes
+    from . import artists
+    app.register_blueprint(artists.bp)
+    app.add_url_rule('/', endpoint='index')
+
+    from . import albums
+    app.register_blueprint(albums.bp)
+    app.add_url_rule('/', endpoint='index')
+
+    from . import tracks
+    app.register_blueprint(tracks.bp)
+    app.add_url_rule('/', endpoint='index')
+
     return app
