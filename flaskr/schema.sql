@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS Artista;
 DROP TABLE IF EXISTS Album;
 DROP TABLE IF EXISTS Cancion;
 
+
 CREATE TABLE Artista (
     id TEXT PRIMARY KEY,
     name TEXT,
@@ -19,7 +20,7 @@ CREATE TABLE Album (
     artist TEXT,
     tracks TEXT,
     self TEXT,
-    FOREIGN KEY (artist_id) REFERENCES Artista (id)
+    FOREIGN KEY (artist_id) REFERENCES Artista (id) ON DELETE CASCADE
 );
 
 CREATE TABLE Cancion (
@@ -31,5 +32,6 @@ CREATE TABLE Cancion (
     artist TEXT,
     album TEXT,
     self TEXT,
-    FOREIGN KEY (album_id) REFERENCES Album (id)
+    FOREIGN KEY (album_id) REFERENCES Album (id) ON DELETE CASCADE
 );
+
