@@ -2,7 +2,6 @@ attrs==20.3.0
 click==7.1.2
 coverage==5.5
 Flask==1.1.2
--e git+https://github.com/mmsaavedra1/Tarea2@96260ecd85aa6fb1ee8ba32ad672af754dcfe1a1#egg=flaskr
 gunicorn==20.1.0
 iniconfig==1.1.1
 itsdangerous==1.1.0
