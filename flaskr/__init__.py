@@ -30,14 +30,14 @@ def create_app(test_config=None):
     # Create routes
     from . import artists
     app.register_blueprint(artists.bp)
-    app.add_url_rule('/', endpoint='index')
+    app.add_url_rule('/', endpoint='artists')
 
     from . import albums
     app.register_blueprint(albums.bp)
-    app.add_url_rule('/', endpoint='index')
+    app.add_url_rule('/', endpoint='albums')
 
     from . import tracks
     app.register_blueprint(tracks.bp)
-    app.add_url_rule('/', endpoint='index')
+    app.add_url_rule('/', endpoint='tracks')
 
     return app
