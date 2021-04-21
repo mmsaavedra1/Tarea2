@@ -14,7 +14,7 @@ def codificar_id(name):
 
 
 @bp.route('/artists', methods=['GET', 'POST'])
-def index():
+def artists():
     if request.method ==  'POST':
         # Comprueba que el body está bien hecho
         try:
