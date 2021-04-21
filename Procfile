@@ -1,1 +1,1 @@
-gunicorn $FLASK_APP:app
+web: gunicorn flaskr.wsgi --log-file -
