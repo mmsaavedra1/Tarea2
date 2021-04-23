@@ -58,7 +58,7 @@ def albums_albumId_tracks(album_id):
     if request.method == 'POST':
         # Cromprueba si el body está bien hecho
         try:
-            name = str(request.form['name'])
+            name = str(request.form["name"])
         except:
             resp = jsonify({
                 'error': f"Input inválido en parámetro 'name'",
@@ -67,7 +67,7 @@ def albums_albumId_tracks(album_id):
             return resp
         
         try:
-            duration = float(request.form['duration'])
+            duration = float(request.form["duration"])
         except:
             resp = jsonify({
                 'error': f"Input inválido en parámetro 'duration'",

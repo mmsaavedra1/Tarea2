@@ -19,7 +19,7 @@ def artists():
     if request.method ==  'POST':
         # Comprueba que el body está bien hecho
         try:
-            name = str(request.form['name'])
+            name = str(request["name"])
         except:
             resp = jsonify({
                 'error': f"Input inválido en parámetro 'name'",
@@ -27,7 +27,7 @@ def artists():
             resp.status_code = 400
             return resp
         try:
-            age = int(request.form['age'])
+            age = int(request.form["age"])
         except:
             resp = jsonify({
                 'error': f"Input inválido en parámetro 'age'",
@@ -111,7 +111,7 @@ def artist_artistId_albums(artist_id):
     if request.method == 'POST':
         # Cromprueba si el body está bien hecho
         try:
-            name = str(request.form['name'])
+            name = str(request.form["name"])
         except:
             resp = jsonify({
                 'error': f"Input inválido en parámetro 'name'",
@@ -120,7 +120,7 @@ def artist_artistId_albums(artist_id):
             return resp
         
         try:
-            genre = str(request.form['genre'])
+            genre = str(request.form["genre"])
         except:
             resp = jsonify({
                 'error': f"Input inválido en parámetro 'genre'",
