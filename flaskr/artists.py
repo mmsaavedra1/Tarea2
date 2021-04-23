@@ -33,17 +33,6 @@ def artists():
             return resp
         
 
-        try:
-            name = str(name)
-            age = int(age)
-        except:
-            resp = jsonify({
-                    'error': f"Input invalido",
-                    'TIPO': f"{type(age)}"
-                })
-            resp.status_code = 400
-
-            return resp
 
         # Si esta bien hecho continua aca
         # params
