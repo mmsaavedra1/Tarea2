@@ -18,6 +18,9 @@ def codificar_id(name):
 def artists():
     if request.method ==  'POST':
 
+        name = request.form.get("name")
+        age = request.form.get("age")
+
         # Comprueba que el body está bien hecho
         if ( len(request.form) == 0) or (name == None) or (age == None):
             resp = jsonify({
@@ -27,10 +30,10 @@ def artists():
 
             return resp
         
-        
 
         try:
-            name = int(name)
+            name = str(name)
+            age = int(age)
         except:
             resp = jsonify({
                     'error': f"Input invalido",
