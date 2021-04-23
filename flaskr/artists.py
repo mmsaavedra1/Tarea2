@@ -28,7 +28,8 @@ def artists():
             })
             resp.status_code = 400
             return resp
-        if not isinstance(age, int):
+
+        if  not isinstance(age, int):
             resp = jsonify({
                 'error': f"Input invalido en parametro age",
                 'valores': request.data
