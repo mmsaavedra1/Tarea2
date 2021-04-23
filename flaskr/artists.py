@@ -18,19 +18,20 @@ def codificar_id(name):
 def artists():
     if request.method ==  'POST':
         # Comprueba que el body está bien hecho
-        try:
-            name = str(request.form["name"])
-        except:
+        name = request.form.get("name")
+        age = request.form.get("age")
+
+        if not isinstance(name, str):
             resp = jsonify({
-                'error': f"Input inválido en parámetro name",
+                'error': f"Input invalido en parametro name",
+                'valores': request.data
             })
             resp.status_code = 400
             return resp
-        try:
-            age = int(request.form["age"])
-        except:
+        if not isinstance(age, int):
             resp = jsonify({
-                'error': f"Input inválido en parámetro 'age'",
+                'error': f"Input invalido en parametro age",
+                'valores': request.data
             })
             resp.status_code = 400
             return resp
