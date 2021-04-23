@@ -115,7 +115,10 @@ def artists():
 def artist_artistId_albums(artist_id):
     if request.method == 'POST':
         # Cromprueba si el body está bien hecho
-        if ( len(request.form) == 0) or ("name" not in request.args) or ("genre" not in request.args):
+        name = request.form.get("name")
+        genre = request.form.get("genre")
+
+        if ( len(request.form) == 0) or (name == None) or (genre == None):
             resp = jsonify({
                     'error': f"Input invalido",
                     'valores': request.data
@@ -124,8 +127,6 @@ def artist_artistId_albums(artist_id):
 
             return resp
         
-        name = request.form.get("name")
-        genre = request.form.get("genre")
 
         try:
             name = str(name)

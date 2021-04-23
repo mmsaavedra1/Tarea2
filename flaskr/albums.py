@@ -57,7 +57,10 @@ def albums():
 def albums_albumId_tracks(album_id):
     if request.method == 'POST':
         # Cromprueba si el body está bien hecho
-        if ( len(request.form) == 0) or ("name" not in request.args) or ("duration" not in request.args):
+        name = request.form.get("name")
+        duration = request.form.get("duration")
+
+        if ( len(request.form) == 0) or (name == None) or (duration == None):
             resp = jsonify({
                     'error': f"Input invalido",
                     'valores': request.data
@@ -66,9 +69,6 @@ def albums_albumId_tracks(album_id):
 
             return resp
         
-        name = request.form.get("name")
-        duration = request.form.get("duration")
-
         try:
             name = str(name)
             duration = float(duration)
