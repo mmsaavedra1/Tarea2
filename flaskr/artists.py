@@ -17,21 +17,28 @@ def codificar_id(name):
 @bp.route('/artists', methods=['GET', 'POST'])
 def artists():
     if request.method ==  'POST':
-
-        name = request.form.get("name")
-        age = request.form.get("age")
-
+        
         # Comprueba que el body está bien hecho
-        if ( len(request.form) == 0) or (name == None) or (age == None):
+        if len(request.form) != 0:
+            name = request.form.get("name")
+            age = request.form.get("age")
+
+            if ((name == None) or (age == None)):
+                resp = jsonify({
+                        'error': f"Input invalido",
+                        "name": name,
+                        "age": age
+                    })
+                resp.status_code = 400
+
+                return resp
+        else:
             resp = jsonify({
-                    'error': f"Input invalido",
-                    "name": name,
-                    "age": age
+                    'error': f"Input vacio"
                 })
             resp.status_code = 400
 
             return resp
-        
 
 
         # Si esta bien hecho continua aca
@@ -109,25 +116,23 @@ def artists():
 def artist_artistId_albums(artist_id):
     if request.method == 'POST':
         # Cromprueba si el body está bien hecho
-        name = request.form.get("name")
-        genre = request.form.get("genre")
+        # Comprueba que el body está bien hecho
+        if len(request.form) != 0:
+            name = request.form.get("name")
+            genre = request.form.get("genre")
 
-        if ( len(request.form) == 0) or (name == None) or (genre == None):
+            if ((name == None) or (genre == None)):
+                resp = jsonify({
+                        'error': f"Input invalido",
+                        "name": name,
+                        "genre": genre
+                    })
+                resp.status_code = 400
+
+                return resp
+        else:
             resp = jsonify({
-                    'error': f"Input invalido",
-                    'valores': request.data
-                })
-            resp.status_code = 400
-
-            return resp
-        
-
-        try:
-            name = str(name)
-            genre = str(genre)
-        except:
-            resp = jsonify({
-                    'error': f"Input invalido"
+                    'error': f"Input vacio"
                 })
             resp.status_code = 400
 

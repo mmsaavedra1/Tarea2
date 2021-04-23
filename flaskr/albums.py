@@ -56,25 +56,23 @@ def albums():
 @bp.route('/albums/<string:album_id>/tracks', methods=['POST', 'GET'])
 def albums_albumId_tracks(album_id):
     if request.method == 'POST':
-        # Cromprueba si el body está bien hecho
-        name = request.form.get("name")
-        duration = request.form.get("duration")
+        # Comprueba que el body está bien hecho
+        if len(request.form) != 0:
+            name = request.form.get("name")
+            duration = request.form.get("duration")
 
-        if ( len(request.form) == 0) or (name == None) or (duration == None):
-            resp = jsonify({
-                    'error': f"Input invalido",
-                    'valores': request.data
-                })
-            resp.status_code = 400
+            if ((name == None) or (duration == None)):
+                resp = jsonify({
+                        'error': f"Input invalido",
+                        "name": name,
+                        "duration": duration
+                    })
+                resp.status_code = 400
 
-            return resp
-        
-        try:
-            name = str(name)
-            duration = float(duration)
-        except:
+                return resp
+        else:
             resp = jsonify({
-                    'error': f"Input invalido"
+                    'error': f"Input vacio"
                 })
             resp.status_code = 400
 
