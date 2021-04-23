@@ -19,10 +19,10 @@ def artists():
     if request.method ==  'POST':
         # Comprueba que el body está bien hecho
         try:
-            name = str(request["name"])
+            name = str(request.form["name"])
         except:
             resp = jsonify({
-                'error': f"Input inválido en parámetro 'name'",
+                'error': f"Input inválido en parámetro name",
             })
             resp.status_code = 400
             return resp
