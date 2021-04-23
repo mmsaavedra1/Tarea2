@@ -18,17 +18,17 @@ def codificar_id(name):
 def artists():
     if request.method ==  'POST':
         # Comprueba que el body está bien hecho
-        if (not request.data) or ("name" not in request.args) or ("age" not in request.args):
+        if (not (len(request.form) == 0)) or ("name" not in request.args) or ("age" not in request.args):
             resp = jsonify({
                     'error': f"Input invalido",
-                    'valores': request.data
+                    'valores': str(request.data)
                 })
             resp.status_code = 400
 
             return resp
         
-        name = request.form.get("name")
-        age = request.form.get("age")
+        name = request.form["name"]
+        age = request.form["age"]
 
         name = str(name)
         age = int(age)
@@ -108,7 +108,7 @@ def artists():
 def artist_artistId_albums(artist_id):
     if request.method == 'POST':
         # Cromprueba si el body está bien hecho
-        if (not request.data) or ("name" not in request.args) or ("genre" not in request.args):
+        if (not (len(request.form) == 0)) or ("name" not in request.args) or ("genre" not in request.args):
             resp = jsonify({
                     'error': f"Input invalido",
                     'valores': request.data
