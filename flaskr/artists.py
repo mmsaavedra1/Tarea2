@@ -17,28 +17,23 @@ def codificar_id(name):
 @bp.route('/artists', methods=['GET', 'POST'])
 def artists():
     if request.method ==  'POST':
-        
+        valores = json.loads(request.json())
         # Comprueba que el body está bien hecho
-        if len(request.form) != 0:
-            name = request.form.get("name")
-            age = request.form.get("age")
 
-            if ((name == None) or (age == None)):
-                resp = jsonify({
-                        'error': f"Input invalido",
-                        "name": name,
-                        "age": age
-                    })
-                resp.status_code = 400
-
-                return resp
-        else:
+        if ("name" not in valores) or ("age" not in valores):
+        #if ((name == None) or (age == None)):
             resp = jsonify({
-                    'error': f"Input vacio"
+                    'error': f"Input invalido",
+                    "name": name,
+                    "age": age
                 })
             resp.status_code = 400
 
             return resp
+        else:
+            name = valores["name"]
+            age = valores["age"]
+
 
 
         # Si esta bien hecho continua aca
