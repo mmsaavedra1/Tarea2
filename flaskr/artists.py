@@ -24,7 +24,9 @@ def artists():
         # Comprueba que el body está bien hecho
         if ( len(request.form) == 0) or (name == None) or (age == None):
             resp = jsonify({
-                    'error': f"Input invalido"
+                    'error': f"Input invalido",
+                    "name": name,
+                    "age": age
                 })
             resp.status_code = 400
 
