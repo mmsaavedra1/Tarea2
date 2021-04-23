@@ -38,9 +38,9 @@ def artists():
         # Si esta bien hecho continua aca
         # params
         id_ = b64encode(name.encode()).decode('utf-8')[:22]
-        albums_url = f'{os.environ.get("HEROKU_URL")}/artists/{id_}/albums'
-        tracks_url = f'{os.environ.get("HEROKU_URL")}/artists/{id_}/tracks'
-        self_ = f'{os.environ.get("HEROKU_URL")}/artists/{id_}'
+        albums_url = f'{os.environ.get("HEROKU_URL")}artists/{id_}/albums'
+        tracks_url = f'{os.environ.get("HEROKU_URL")}artists/{id_}/tracks'
+        self_ = f'{os.environ.get("HEROKU_URL")}artists/{id_}'
 
         # Objeto respuesta
         resp = jsonify({
@@ -138,9 +138,9 @@ def artist_artistId_albums(artist_id):
             try:
                 # params
                 id_ = b64encode(name.encode()).decode('utf-8')[:22]
-                artist_url = f'{os.environ.get("HEROKU_URL")}/artists/{artist_id}'
-                tracks_url = f'{os.environ.get("HEROKU_URL")}/albums/{id_}/tracks'
-                self_ = f'{os.environ.get("HEROKU_URL")}/albums/{id_}'
+                artist_url = f'{os.environ.get("HEROKU_URL")}artists/{artist_id}'
+                tracks_url = f'{os.environ.get("HEROKU_URL")}albums/{id_}/tracks'
+                self_ = f'{os.environ.get("HEROKU_URL")}albums/{id_}'
                 # response
                 resp = jsonify({
                     'id': id_,

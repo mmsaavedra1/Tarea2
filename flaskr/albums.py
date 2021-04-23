@@ -85,9 +85,9 @@ def albums_albumId_tracks(album_id):
                 # params
                 id_ = b64encode(name.encode()).decode('utf-8')[:22]
                 query_artist_id = db.execute(f"SELECT artist_id FROM Album WHERE id='{album_id}'").fetchone()[0]
-                artist_url = f'{os.environ.get("HEROKU_URL")}/artists/{query_artist_id}'
-                album_url = f'{os.environ.get("HEROKU_URL")}/albums/{album_id}'
-                self_ = f'{os.environ.get("HEROKU_URL")}/tracks/{id_}'
+                artist_url = f'{os.environ.get("HEROKU_URL")}artists/{query_artist_id}'
+                album_url = f'{os.environ.get("HEROKU_URL")}albums/{album_id}'
+                self_ = f'{os.environ.get("HEROKU_URL")}tracks/{id_}'
                 # response
                 resp = jsonify({
                     'id': id_,
