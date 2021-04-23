@@ -44,6 +44,13 @@ def tracks():
         resp.status_code = 200
 
         return resp
+    
+    else:
+        resp = jsonify({
+                'error': 'Metodo HTTP inexistente.'
+            })
+        resp.status_code = 405
+        return resp
 
 @bp.route('/tracks/<string:track_id>', methods=['GET'])
 def tracks_trackId(track_id):
@@ -100,3 +107,23 @@ def tracks_trackId(track_id):
             })
             resp.status_code = 404
             return resp
+    
+    else:
+        resp = jsonify({
+                'error': 'Metodo HTTP inexistente.'
+            })
+        resp.status_code = 405
+        return resp
+
+
+@bp.route('/tracks/<string:track_id>/play')
+def tracks_trackId_play(track_id):
+    if request.method == 'POST':
+        pass
+        #TODO
+    else:
+        resp = jsonify({
+                'error': 'Metodo HTTP inexistente.'
+            })
+        resp.status_code = 405
+        return resp

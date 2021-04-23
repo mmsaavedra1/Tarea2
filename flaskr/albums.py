@@ -4,6 +4,7 @@ from flaskr.db import get_db
 from base64 import b64encode
 import sqlite3
 import json
+import os
 
 
 bp = Blueprint('albums', __name__)
@@ -43,6 +44,13 @@ def albums():
         resp.status_code = 200
 
         return resp
+    
+    else:
+        resp = jsonify({
+                'error': 'Metodo HTTP inexistente.'
+            })
+        resp.status_code = 405
+        return resp
 
 
 @bp.route('/albums/<string:album_id>/tracks', methods=['POST', 'GET'])
@@ -69,39 +77,49 @@ def albums_albumId_tracks(album_id):
         
         # Si está bien hecho continua aca
         db = get_db()
-        try:
-            # params
-            id_ = b64encode(name.encode()).decode('utf-8')[:22]
-            query_artist_id = db.execute(f"SELECT artist_id FROM Album WHERE id='{album_id}'").fetchone()[0]
-            artist_url = f'/artists/{query_artist_id}'
-            album_url = f'/albums/{album_id}'
-            self_ = f'/tracks/{id_}'
-            # response
+        query = db.execute(
+            f"SELECT * FROM Album WHERE id='{album_id}'"
+        ).fetchone()
+        if query:
+            try:
+                # params
+                id_ = b64encode(name.encode()).decode('utf-8')[:22]
+                query_artist_id = db.execute(f"SELECT artist_id FROM Album WHERE id='{album_id}'").fetchone()[0]
+                artist_url = f'{os.environ.get("HEROKU_URL")}/artists/{query_artist_id}'
+                album_url = f'{os.environ.get("HEROKU_URL")}/albums/{album_id}'
+                self_ = f'{os.environ.get("HEROKU_URL")}/tracks/{id_}'
+                # response
+                resp = jsonify({
+                    'id': id_,
+                    'album_id': album_id,
+                    'name': name,
+                    'duration': duration,
+                    'times_played': 0,
+                    'artist': artist_url,
+                    'album': album_url,
+                    'self': self_
+                })
+
+                post = db.execute(
+                    'INSERT INTO Cancion (id, album_id, name, duration, times_played, artist, album, self)'
+                    'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                    (id_, album_id, name, duration, 0, artist_url, album_url, self_) 
+                )
+                db.commit()
+
+                # Significa que retorno con exito
+                resp.status_code = 201
+                return resp
+
+            except sqlite3.IntegrityError as err:
+                    # Significa que ya existe en BD
+                resp.status_code = 409
+                return resp
+        else:
             resp = jsonify({
-                'id': id_,
-                'album_id': album_id,
-                'name': name,
-                'duration': duration,
-                'times_played': 0,
-                'artist': artist_url,
-                'album': album_url,
-                'self': self_
+                'error': 'Album no existente.'
             })
-
-            post = db.execute(
-                'INSERT INTO Cancion (id, album_id, name, duration, times_played, artist, album, self)'
-                'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                (id_, album_id, name, duration, 0, artist_url, album_url, self_) 
-            )
-            db.commit()
-
-            # Significa que retorno con exito
-            resp.status_code = 200
-            return resp
-
-        except sqlite3.IntegrityError as err:
-                # Significa que ya existe en BD
-            resp.status_code = 409
+            resp.status_code = 422
             return resp
     
     elif request.method == 'GET':
@@ -135,6 +153,13 @@ def albums_albumId_tracks(album_id):
             })
             resp.status_code = 404
             return resp
+    
+    else:
+        resp = jsonify({
+                'error': 'Metodo HTTP inexistente.'
+            })
+        resp.status_code = 405
+        return resp
 
    
 
@@ -193,3 +218,22 @@ def albums_artistId(album_id):
             resp.status_code = 404
             return resp
     
+    else:
+        resp = jsonify({
+                'error': 'Metodo HTTP inexistente.'
+            })
+        resp.status_code = 405
+        return resp
+    
+
+@bp.route('/albums/<string:album_id>/tracks/play')
+def albums_albumId_tracks_play(album_id):
+    if request.method == 'POST':
+        pass
+        #TODO
+    else:
+        resp = jsonify({
+                'error': 'Metodo HTTP inexistente.'
+            })
+        resp.status_code = 405
+        return resp
