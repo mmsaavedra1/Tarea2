@@ -23,9 +23,9 @@ def artists():
                     'error': f"Input invalido",
                     'valores': request.data
                 })
-                resp.status_code = 400
+            resp.status_code = 400
 
-                return resp
+            return resp
         
         name = request.form.get("name")
         age = request.form.get("age")
@@ -108,31 +108,20 @@ def artists():
 def artist_artistId_albums(artist_id):
     if request.method == 'POST':
         # Cromprueba si el body está bien hecho
-        if not request.data:
-        resp = jsonify({
-                'error': f"Input invalido",
-                'valores': request.data
-            })
+        if (not request.data) or ("name" not in request.args) or ("genre" not in request.args):
+            resp = jsonify({
+                    'error': f"Input invalido",
+                    'valores': request.data
+                })
             resp.status_code = 400
 
             return resp
-        try:
-            name = str(request.form["name"])
-        except:
-            resp = jsonify({
-                'error': f"Input inválido en parámetro 'name'",
-            })
-            resp.status_code = 400
-            return resp
         
-        try:
-            genre = str(request.form["genre"])
-        except:
-            resp = jsonify({
-                'error': f"Input inválido en parámetro 'genre'",
-            })
-            resp.status_code = 400
-            return resp
+        name = request.form.get("name")
+        genre = request.form.get("genre")
+
+        name = str(name)
+        genre = str(genre)
         
         # Si está bien hecho continua aca
         db = get_db()
