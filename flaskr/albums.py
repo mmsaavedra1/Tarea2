@@ -111,7 +111,8 @@ def albums_albumId_tracks(album_id):
                 return resp
         else:
             resp = jsonify({
-                'error': 'Album no existente.'
+                'error': 'Album no existente.',
+                'query': query
             })
             resp.status_code = 422
             return resp
