@@ -18,10 +18,9 @@ def codificar_id(name):
 def artists():
     if request.method ==  'POST':
         # Comprueba que el body está bien hecho
-        if (not (len(request.form) == 0)) or ("name" not in request.args) or ("age" not in request.args):
+        if (not (len(request.form) == 0)) and ("name" not in request.args) and ("age" not in request.args):
             resp = jsonify({
-                    'error': f"Input invalido",
-                    'valores': str(request.data)
+                    'error': f"Input invalido"
                 })
             resp.status_code = 400
 
@@ -30,8 +29,16 @@ def artists():
         name = request.form["name"]
         age = request.form["age"]
 
-        name = str(name)
-        age = int(age)
+        try:
+            name = str(name)
+            age = int(age)
+        except:
+            resp = jsonify({
+                    'error': f"Input invalido"
+                })
+            resp.status_code = 400
+
+            return resp
 
         # Si esta bien hecho continua aca
         # params
@@ -108,7 +115,7 @@ def artists():
 def artist_artistId_albums(artist_id):
     if request.method == 'POST':
         # Cromprueba si el body está bien hecho
-        if (not (len(request.form) == 0)) or ("name" not in request.args) or ("genre" not in request.args):
+        if (not (len(request.form) == 0)) and ("name" not in request.args) and ("genre" not in request.args):
             resp = jsonify({
                     'error': f"Input invalido",
                     'valores': request.data
@@ -120,8 +127,16 @@ def artist_artistId_albums(artist_id):
         name = request.form.get("name")
         genre = request.form.get("genre")
 
-        name = str(name)
-        genre = str(genre)
+        try:
+            name = str(name)
+            genre = str(genre)
+        except:
+            resp = jsonify({
+                    'error': f"Input invalido"
+                })
+            resp.status_code = 400
+
+            return resp
         
         # Si está bien hecho continua aca
         db = get_db()
