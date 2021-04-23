@@ -17,15 +17,12 @@ def codificar_id(name):
 @bp.route('/artists', methods=['GET', 'POST'])
 def artists():
     if request.method ==  'POST':
-        valores = json.loads(request.json())
         # Comprueba que el body está bien hecho
-
+        valores = request.json
         if ("name" not in valores) or ("age" not in valores):
         #if ((name == None) or (age == None)):
             resp = jsonify({
-                    'error': f"Input invalido",
-                    "name": name,
-                    "age": age
+                    'error': f"Input invalido en json",
                 })
             resp.status_code = 400
 
@@ -110,28 +107,18 @@ def artists():
 @bp.route('/artists/<string:artist_id>/albums', methods=['POST', 'GET'])
 def artist_artistId_albums(artist_id):
     if request.method == 'POST':
-        # Cromprueba si el body está bien hecho
         # Comprueba que el body está bien hecho
-        if len(request.form) != 0:
-            name = request.form.get("name")
-            genre = request.form.get("genre")
-
-            if ((name == None) or (genre == None)):
-                resp = jsonify({
-                        'error': f"Input invalido",
-                        "name": name,
-                        "genre": genre
-                    })
-                resp.status_code = 400
-
-                return resp
-        else:
+        valores = request.json
+        if ("name" not in valores) or ("genre" not in valores):
             resp = jsonify({
-                    'error': f"Input vacio"
+                    'error': f"Input invalido en json",
                 })
             resp.status_code = 400
 
             return resp
+        else:
+            name = valores["name"]
+            genre = valores["genre"]
         
         # Si está bien hecho continua aca
         db = get_db()
