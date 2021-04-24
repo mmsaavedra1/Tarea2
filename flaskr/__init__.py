@@ -1,6 +1,9 @@
 import os
 
 from flask import Flask
+from .extensions import db
+from .commands import create_tables
+
 
 def create_app(test_config=None):
     # Crea y configura la App
@@ -8,7 +11,8 @@ def create_app(test_config=None):
     app.config.from_mapping(
         SECRET_KEY=os.environ.get("SECRET_KEY"),
         #DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-        DATABASE=os.environ.get("DATABASE_URL")
+        SQLALCHEMY_DATABASE_URI=os.environ.get("DATABASE_URL"),
+        SQLALCHEMY_TRACK_MODIFICATIONS=False,
     )
 
     if test_config is None:
@@ -24,9 +28,9 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    # Create db into project
-    from . import db
+    # Configura la base de datos
     db.init_app(app)
+    app.cli.add_command(create_tables)
 
     # Create routes
     from . import artists
