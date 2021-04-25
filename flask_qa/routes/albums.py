@@ -5,12 +5,10 @@ import sqlite3
 import json
 import os
 
+from flask_qa.extensions import db
+from sqlalchemy import text
 
 albumnes = Blueprint('albumnes', __name__)
-
-
-def get_db():
-    pass
 
 
 def codificar_id(name):
@@ -22,14 +20,13 @@ def codificar_id(name):
 def albums():
     if request.method == 'GET':
         # Intenta crear el objeto
-        db = get_db()
 
         # Se guardan los resultados
         resultado = []
         
         # Se crea la consulta
-        get = db.execute(
-            'SELECT * FROM Album'
+        get = db.engine.execute(
+            text('SELECT * FROM Album')
         )
 
         for row in get.fetchall():
