@@ -1,13 +1,16 @@
 from flask import (Flask, g, request, Blueprint, jsonify)
 from werkzeug.exceptions import abort
-from flaskr.db import get_db
 from base64 import b64encode
 import sqlite3
 import json
 import os
 
 
-bp = Blueprint('albums', __name__)
+albumnes = Blueprint('albumnes', __name__)
+
+
+def get_db():
+    pass
 
 
 def codificar_id(name):
@@ -15,7 +18,7 @@ def codificar_id(name):
     return encoded[:22]
 
 
-@bp.route('/albums', methods=['GET'])
+@albumnes.route('/albums', methods=['GET'])
 def albums():
     if request.method == 'GET':
         # Intenta crear el objeto
@@ -53,7 +56,7 @@ def albums():
         return resp
 
 
-@bp.route('/albums/<string:album_id>/tracks', methods=['POST', 'GET'])
+@albumnes.route('/albums/<string:album_id>/tracks', methods=['POST', 'GET'])
 def albums_albumId_tracks(album_id):
     if request.method == 'POST':
         # Comprueba que el body está bien hecho
@@ -158,7 +161,7 @@ def albums_albumId_tracks(album_id):
 
    
 
-@bp.route('/albums/<string:album_id>', methods=['GET', 'DELETE'])
+@albumnes.route('/albums/<string:album_id>', methods=['GET', 'DELETE'])
 def albums_artistId(album_id):
     if request.method == 'GET':
         # Intenta crear el objeto
@@ -221,7 +224,7 @@ def albums_artistId(album_id):
         return resp
     
 
-@bp.route('/albums/<string:album_id>/tracks/play')
+@albumnes.route('/albums/<string:album_id>/tracks/play')
 def albums_albumId_tracks_play(album_id):
     if request.method == 'POST':
         pass

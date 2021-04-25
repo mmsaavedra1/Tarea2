@@ -1,20 +1,21 @@
 from flask import (Flask, g, request, Blueprint, jsonify)
 from werkzeug.exceptions import abort
-from flaskr.db import get_db
 from base64 import b64encode
 import sqlite3
 import json
 
 
-bp = Blueprint('tracks', __name__)
+canciones = Blueprint('canciones', __name__)
 
+def get_db():
+    pass
 
 def codificar_id(name):
     encoded = b64encode(name.encode()).decode('utf-8')
     return encoded[:22]
 
 
-@bp.route('/tracks', methods=['GET'])
+@canciones.route('/tracks', methods=['GET'])
 def tracks():
     if request.method == 'GET':
         # Intenta crear el objeto
@@ -52,7 +53,7 @@ def tracks():
         resp.status_code = 405
         return resp
 
-@bp.route('/tracks/<string:track_id>', methods=['GET'])
+@canciones.route('/tracks/<string:track_id>', methods=['GET'])
 def tracks_trackId(track_id):
     if request.method == 'GET':
          # Intenta crear el objeto
@@ -116,7 +117,7 @@ def tracks_trackId(track_id):
         return resp
 
 
-@bp.route('/tracks/<string:track_id>/play')
+@canciones.route('/tracks/<string:track_id>/play')
 def tracks_trackId_play(track_id):
     if request.method == 'POST':
         pass

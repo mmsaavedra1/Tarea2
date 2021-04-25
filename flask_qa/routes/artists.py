@@ -1,20 +1,22 @@
 from flask import (Flask, g, request, Blueprint, jsonify)
 from werkzeug.exceptions import abort
-from flaskr.db import get_db
 from base64 import b64encode
 import sqlite3
 import json
 import os
 
 
-bp = Blueprint('artists', __name__)
+artistas = Blueprint('artistas', __name__)
+
+def get_db():
+    pass
 
 def codificar_id(name):
     encoded = b64encode(name.encode()).decode('utf-8')
     return encoded[:22]
 
 
-@bp.route('/artists', methods=['GET', 'POST'])
+@artistas.route('/artists', methods=['GET', 'POST'])
 def artists():
     if request.method ==  'POST':
         # Comprueba que el body está bien hecho
@@ -104,7 +106,7 @@ def artists():
         return resp
 
 
-@bp.route('/artists/<string:artist_id>/albums', methods=['POST', 'GET'])
+@artistas.route('/artists/<string:artist_id>/albums', methods=['POST', 'GET'])
 def artist_artistId_albums(artist_id):
     if request.method == 'POST':
         # Comprueba que el body está bien hecho
@@ -205,7 +207,7 @@ def artist_artistId_albums(artist_id):
         return resp
 
 
-@bp.route('/artists/<string:artist_id>/tracks', methods=['GET'])
+@artistas.route('/artists/<string:artist_id>/tracks', methods=['GET'])
 def artist_artistId_tracks(artist_id):
     if request.method == 'GET':
         # Intenta crear el objeto
@@ -249,7 +251,7 @@ def artist_artistId_tracks(artist_id):
 
 
 
-@bp.route('/artists/<string:artist_id>', methods=['GET', 'DELETE'])
+@artistas.route('/artists/<string:artist_id>', methods=['GET', 'DELETE'])
 def artist_artistId(artist_id):
     if request.method == 'GET':
         # Intenta crear el objeto
@@ -310,7 +312,7 @@ def artist_artistId(artist_id):
         resp.status_code = 405
         return resp
         
-@bp.route('/artists/<string:artist_id>/albums/play')
+@artistas.route('/artists/<string:artist_id>/albums/play')
 def artist_artistId_albums_play(artist_id):
     if request.method == 'POST':
         pass
