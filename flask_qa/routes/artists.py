@@ -1,15 +1,20 @@
-from flask import (Flask, g, request, Blueprint, jsonify)
+from flask import (Flask, g, request, Blueprint, jsonify, current_app)
 from werkzeug.exceptions import abort
 from base64 import b64encode
 import sqlite3
 import json
 import os
 
+from sqlalchemy import create_engine
+
+
 
 artistas = Blueprint('artistas', __name__)
 
 def get_db():
-    pass
+    engine = create_engine(current_app.config.get("DATABASE_URL"))
+    return engine
+
 
 def codificar_id(name):
     encoded = b64encode(name.encode()).decode('utf-8')
