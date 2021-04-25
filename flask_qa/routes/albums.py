@@ -25,8 +25,8 @@ def albums():
         resultado = []
         
         # Se crea la consulta
-        get = db.engine.execute(
-            text('SELECT * FROM Album')
+        get = db.session.execute(
+            'SELECT * FROM Album'
         )
 
         for row in get.fetchall():
