@@ -1,19 +1,15 @@
-from flask import (Flask, g, request, Blueprint, jsonify, current_app)
+from flask import (Flask, g, request, Blueprint, jsonify)
 from werkzeug.exceptions import abort
 from base64 import b64encode
 import sqlite3
 import json
 import os
 
-from sqlalchemy import create_engine
-
-
+from Tarea2.extensions import db
+from sqlalchemy import text
+from Tarea2.models import *
 
 artistas = Blueprint('artistas', __name__)
-
-def get_db():
-    engine = create_engine(current_app.config.get("DATABASE_URL"))
-    return engine
 
 
 def codificar_id(name):
@@ -38,8 +34,6 @@ def artists():
             name = valores["name"]
             age = valores["age"]
 
-
-
         # Si esta bien hecho continua aca
         # params
         id_ = b64encode(name.encode()).decode('utf-8')[:22]
@@ -58,14 +52,10 @@ def artists():
             })
 
         # Intenta crear el objeto
-        db = get_db()
         try:
-            post = db.execute(
-                'INSERT INTO Artista (id, name, age, albums, tracks, self)'
-                ' VALUES (?, ?, ?, ?, ?, ?)',
-                (id_, name, age, albums_url, tracks_url, self_)
-            )
-            db.commit()
+            artista = Artista(id_, name, age, albums_url, tracks_url, self_)
+            db.session.add(artista)
+            db.session.commit()
 
             # Significa que retorno con exito
             resp.status_code = 201
@@ -77,25 +67,21 @@ def artists():
             return resp
 
     elif request.method == 'GET':
-        # Intenta crear el objeto
-        db = get_db()
 
         # Se guardan los resultados
         resultado = []
         
         # Se crea la consulta
-        get = db.execute(
-            'SELECT * FROM Artista'
-        )
-
-        for row in get.fetchall():
+        get = db.session.query(Artista)
+        print(get.all())
+        for row in get.all():
             resultado.append({
-                'id': row[0],
-                'name': row[1],
-                'age': row[2],
-                'albums': row[3],
-                'tracks': row[4],
-                'self': row[5]
+                'id': row.id,
+                'name': row.name,
+                'age': row.age,
+                'albums': row.albums,
+                'tracks': row.tracks,
+                'self': row.self_
             })
         
         resp = jsonify(resultado)

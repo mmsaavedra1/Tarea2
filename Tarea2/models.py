@@ -1,4 +1,3 @@
-from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
 
 from .extensions import db 
@@ -10,6 +9,14 @@ class Artista(db.Model):
     albums = db.Column("albums", db.Text)
     tracks = db.Column("tracks", db.Text)
     self_ = db.Column("self", db.Text)
+
+    def __init__(self, id, name, age, albums, tracks, self_):
+        self.id = id
+        self.name = name
+        self.age = age
+        self.albums = albums
+        self.tracks = tracks
+        self.self_ = self_
 
 
 class Album(db.Model):

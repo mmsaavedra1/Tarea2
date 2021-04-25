@@ -5,8 +5,9 @@ import sqlite3
 import json
 import os
 
-from flask_qa.extensions import db
+from Tarea2.extensions import db
 from sqlalchemy import text
+from Tarea2.models import *
 
 albumnes = Blueprint('albumnes', __name__)
 
@@ -25,11 +26,9 @@ def albums():
         resultado = []
         
         # Se crea la consulta
-        get = db.session.execute(
-            'SELECT * FROM Album'
-        )
+        get = db.session.query(Album)
 
-        for row in get.fetchall():
+        for row in get.all():
             resultado.append({
                 'id': row[0],
                 'artist_id': row[1],
@@ -70,7 +69,6 @@ def albums_albumId_tracks(album_id):
             duration = valores["duration"]
         
         # Si está bien hecho continua aca
-        db = get_db()
         query = db.execute(
             f"SELECT * FROM Album WHERE id='{album_id}'"
         ).fetchone()
