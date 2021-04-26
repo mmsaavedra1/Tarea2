@@ -66,50 +66,49 @@ def albums_albumId_tracks(album_id):
         else:
             name = valores["name"]
             duration = valores["duration"]
-        
+
+
         # Si está bien hecho continua aca
         query = db.session.query(Album).filter(Album.id == album_id).all()
+        
         if query:
-            try:
-                # params
-                id_ = b64encode(name.encode()).decode('utf-8')[:22]
-                artist_url = f'{os.environ.get("HEROKU_URL")}artists/{query[0].id}'
-                album_url = f'{os.environ.get("HEROKU_URL")}albums/{album_id}'
-                self_ = f'{os.environ.get("HEROKU_URL")}tracks/{id_}'
-                # response
-                resp = jsonify({
-                    'id': id_,
-                    'album_id': album_id,
-                    'name': name,
-                    'duration': duration,
-                    'times_played': 0,
-                    'artist': artist_url,
-                    'album': album_url,
-                    'self': self_
-                })
-
+            # Body request
+            id_ = b64encode(name.encode()).decode('utf-8')
+            artist_url = f'{os.environ.get("HEROKU_URL")}artists/{query[0].id}'
+            album_url = f'{os.environ.get("HEROKU_URL")}albums/{album_id}'
+            self_ = f'{os.environ.get("HEROKU_URL")}tracks/{id_}'
+            # response
+            resp = jsonify({
+                'id': id_,
+                'album_id': album_id,
+                'name': name,
+                'duration': duration,
+                'times_played': 0,
+                'artist': artist_url,
+                'album': album_url,
+                'self': self_
+            })
+                
+            query2 = db.session.query(Cancion).filter(Cancion.id == id_).all()
+            if query2:
+                # Significa que ya existe en BD
+                resp.status_code = 409
+                return resp
+            else:
                 track = Cancion(id_, album_id, name, duration, 0, artist_url, album_url, self_)
                 db.session.add(track)
                 db.session.commit()
-
                 # Significa que retorno con exito
                 resp.status_code = 201
                 return resp
-
-            except:
-                    # Significa que ya existe en BD
-                resp.status_code = 409
-                return resp
         else:
-            resp = jsonify({
-                'error': 'Album no existente.'
-            })
+            # Significa que no existe el album
             resp.status_code = 422
             return resp
     
     elif request.method == 'GET':
         # Se crea la query
-        get = db.session.query(Cancion).filter(Cancion.album_id == album_id)
+        get = db.session.query(Cancion).filter(Cancion.album_id == album_id).all()
         if get:
             resultado = []
             for row in get:
