@@ -36,7 +36,7 @@ def artists():
 
         # Si esta bien hecho continua aca
         # params
-        id_ = b64encode(name.encode()).decode('utf-8')[:22]
+        id_ = b64encode(name.encode()).decode('utf-8')
         albums_url = f'{os.environ.get("HEROKU_URL")}artists/{id_}/albums'
         tracks_url = f'{os.environ.get("HEROKU_URL")}artists/{id_}/tracks'
         self_ = f'{os.environ.get("HEROKU_URL")}artists/{id_}'
@@ -50,20 +50,20 @@ def artists():
                 'tracks': tracks_url,
                 'self': self_
             })
+        
+        # Comprueba si existe o no el artista
+        get = db.session.query(Artista).filter(Artista.id == id_).all()
+        if get:           
+            resp.status_code = 409
+            return resp
 
-        # Intenta crear el objeto
-        try:
+        else:
             artista = Artista(id_, name, age, albums_url, tracks_url, self_)
             db.session.add(artista)
             db.session.commit()
 
             # Significa que retorno con exito
             resp.status_code = 201
-            return resp
-
-        except:
-                # Significa que ya existe en BD
-            resp.status_code = 409
             return resp
 
     elif request.method == 'GET':
@@ -113,51 +113,47 @@ def artist_artistId_albums(artist_id):
             name = valores["name"]
             genre = valores["genre"]
         
+        # Body Request
+        id_ = b64encode(name.encode()).decode('utf-8')
+        artist_url = f'{os.environ.get("HEROKU_URL")}artists/{artist_id}'
+        tracks_url = f'{os.environ.get("HEROKU_URL")}albums/{id_}/tracks'
+        self_ = f'{os.environ.get("HEROKU_URL")}albums/{id_}'
+        # response
+        resp = jsonify({
+            'name': name,
+            'genre': genre,
+            'artist': artist_url,
+            'tracks': tracks_url,
+            'self': self_
+        })
        
         # Comrprobar que el artista existe para crear un album
         query = db.session.query(Artista).filter(Artista.id == artist_id).all()
-        
-        if query:
-            try:
-                # params
-                id_ = b64encode(name.encode()).decode('utf-8')[:22]
-                artist_url = f'{os.environ.get("HEROKU_URL")}artists/{artist_id}'
-                tracks_url = f'{os.environ.get("HEROKU_URL")}albums/{id_}/tracks'
-                self_ = f'{os.environ.get("HEROKU_URL")}albums/{id_}'
-                # response
-                resp = jsonify({
-                    'name': name,
-                    'genre': genre,
-                    'artist': artist_url,
-                    'tracks': tracks_url,
-                    'self': self_
-                })
+        query2 = db.session.query(Album).filter(Album.id == id_).all()
 
+        if query:
+            if query2:
+                # Significa que ya existe en BD el album
+                resp.status_code = 409
+                return resp
+            else:
                 album = Album(id_, query[0].id, name, genre, artist_url, tracks_url, self_)
                 db.session.add(album)
                 db.session.commit()
-
                 # Significa que retorno con exito
                 resp.status_code = 201
                 return resp
-
-            except:
-                    # Significa que ya existe en BD
-                resp.status_code = 409
-                return resp
         else:
-            resp = jsonify({
-                'error': 'Artista no existente.'
-            })
+            # Significa que no existe el artista previo
             resp.status_code = 422
             return resp
 
     elif request.method == 'GET':
         # Se crea la query
-        get = db.session.query(Album).filter(artist_id == artist_id)
+        get = db.session.query(Album).filter(artist_id == artist_id).all()
         if get:
             resultado = []
-            for row in get.all():
+            for row in get:
                 resultado.append({
                     'id': row.id,
                     'artist_id': row.artist_id,
@@ -191,19 +187,19 @@ def artist_artistId_albums(artist_id):
 def artist_artistId_tracks(artist_id):
     if request.method == 'GET':
         # Se crea la query
-        get = db.session.query(Cancion).filter(Cancion.artist == f"{os.environ.get('HEROKU_URL')}artists/{artist_id}")
+        get = db.session.query(Cancion).filter(Cancion.artist == f"{os.environ.get('HEROKU_URL')}artists/{artist_id}").all()
         if get:
             resultado = []
-            for row in get.all():
+            for row in get:
                 resultado.append({
-                    'id': row[0],
-                    'album_id': row[1],
-                    'name': row[2],
-                    'duration': row[3],
-                    'times_played': row[4],
-                    'artist': row[5],
-                    'album': row[6],
-                    'self': row[7]
+                    'id': row.id,
+                    'album_id': row.album_id,
+                    'name': row.name,
+                    'duration': row.duration,
+                    'times_played': row.times_played,
+                    'artist': row.artist,
+                    'album': row.album,
+                    'self': row.self_
                 })
             
             resp = jsonify(resultado)
