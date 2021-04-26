@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "37fe32720461033150c240a289380d00492dc58cfd198d4152cb13bfbbc325cc"
+            "sha256": "a9d0ddf4410bfec3ac171807bf27bb8a9ca0a318704a284cb39bd123183364ae"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -186,6 +186,14 @@
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.1.1"
         },
+        "postgres": {
+            "hashes": [
+                "sha256:85649aed35fc109c8413ffa5d167ff003f76e978e726f65340bf949ab7cd22ab",
+                "sha256:ada2608527d56058ac2f72b5b0671a4893e04207d63059279ce9196436b98637"
+            ],
+            "index": "pypi",
+            "version": "==3.0.0"
+        },
         "psycopg2-binary": {
             "hashes": [
                 "sha256:0deac2af1a587ae12836aa07970f5cb91964f05a7c6cdb69d8425ff4c15d4e2c",
@@ -226,6 +234,14 @@
             ],
             "index": "pypi",
             "version": "==2.8.6"
+        },
+        "psycopg2-pool": {
+            "hashes": [
+                "sha256:529c4100db56a3522cf680ce8d89e71511e37c7e0b1f120ce0dde0f13c6e5844",
+                "sha256:de88615c24ddfc7ee314c566976cfed4bbb009211255f2773ea09e5f938ff400"
+            ],
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
+            "version": "==1.1"
         },
         "python-dotenv": {
             "hashes": [
