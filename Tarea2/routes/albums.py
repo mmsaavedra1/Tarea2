@@ -141,8 +141,7 @@ def albums_albumId_tracks(album_id):
         resp.status_code = 405
         return resp
 
-   
-# TODO: No está eliminando en cascada
+
 @albumnes.route('/albums/<string:album_id>', methods=['GET', 'DELETE'])
 def albums_artistId(album_id):
     if request.method == 'GET':
@@ -192,7 +191,7 @@ def albums_artistId(album_id):
         resp.status_code = 405
         return resp
     
-
+"""
 @albumnes.route('/albums/<string:album_id>/tracks/play')
 def albums_albumId_tracks_play(album_id):
     if request.method == 'POST':
@@ -204,3 +203,4 @@ def albums_albumId_tracks_play(album_id):
             })
         resp.status_code = 405
         return resp
+"""

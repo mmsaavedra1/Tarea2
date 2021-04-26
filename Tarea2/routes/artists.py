@@ -269,7 +269,7 @@ def artist_artistId(artist_id):
         resp.status_code = 405
         return resp
         
-
+"""
 @artistas.route('/artists/<string:artist_id>/albums/play')
 def artist_artistId_albums_play(artist_id):
     if request.method == 'POST':
@@ -281,3 +281,4 @@ def artist_artistId_albums_play(artist_id):
             })
         resp.status_code = 405
         return resp
+"""
