@@ -126,8 +126,6 @@ def artist_artistId_albums(artist_id):
                 self_ = f'{os.environ.get("HEROKU_URL")}albums/{id_}'
                 # response
                 resp = jsonify({
-                    'id': id_,
-                    'artist_id': query[0].id,
                     'name': name,
                     'genre': genre,
                     'artist': artist_url,
