@@ -20,7 +20,6 @@ def codificar_id(name):
 @albumnes.route('/albums', methods=['GET'])
 def albums():
     if request.method == 'GET':
-        # Intenta crear el objeto
 
         # Se guardan los resultados
         resultado = []
@@ -30,13 +29,13 @@ def albums():
 
         for row in get.all():
             resultado.append({
-                'id': row[0],
-                'artist_id': row[1],
-                'name': row[2],
-                'genre': row[3],
-                'artist': row[4],
-                'tracks': row[5],
-                'self': row[6]
+                'id': row.id,
+                'artist_id': row.artist_id,
+                'name': row.name,
+                'genre': row.genre,
+                'artist': row.artist,
+                'tracks': row.tracks,
+                'self': row.self_
             })
         
         resp = jsonify(resultado)
@@ -69,15 +68,13 @@ def albums_albumId_tracks(album_id):
             duration = valores["duration"]
         
         # Si está bien hecho continua aca
-        query = db.execute(
-            f"SELECT * FROM Album WHERE id='{album_id}'"
-        ).fetchone()
+        query = db.session.query(Album).filter(Album.id == album_id)
         if query:
             try:
                 # params
                 id_ = b64encode(name.encode()).decode('utf-8')[:22]
-                query_artist_id = db.execute(f"SELECT artist_id FROM Album WHERE id='{album_id}'").fetchone()[0]
-                artist_url = f'{os.environ.get("HEROKU_URL")}artists/{query_artist_id}'
+                query_artist_id = db.session.query(Album).filter(Album.id == album_id).all()[0]
+                artist_url = f'{os.environ.get("HEROKU_URL")}artists/{query_artist_id.id}'
                 album_url = f'{os.environ.get("HEROKU_URL")}albums/{album_id}'
                 self_ = f'{os.environ.get("HEROKU_URL")}tracks/{id_}'
                 # response
@@ -92,18 +89,15 @@ def albums_albumId_tracks(album_id):
                     'self': self_
                 })
 
-                post = db.execute(
-                    'INSERT INTO Cancion (id, album_id, name, duration, times_played, artist, album, self)'
-                    'VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                    (id_, album_id, name, duration, 0, artist_url, album_url, self_) 
-                )
-                db.commit()
+                track = Cancion(id_, album_id, name, duration, 0, artist_url, album_url, self_)
+                db.session.add(track)
+                db.session.commit()
 
                 # Significa que retorno con exito
                 resp.status_code = 201
                 return resp
 
-            except sqlite3.IntegrityError as err:
+            except:
                     # Significa que ya existe en BD
                 resp.status_code = 409
                 return resp
@@ -116,24 +110,20 @@ def albums_albumId_tracks(album_id):
             return resp
     
     elif request.method == 'GET':
-        # Intenta crear el objeto
-        db = get_db()
         # Se crea la query
-        get = db.execute(
-            f"SELECT * FROM Cancion WHERE album_id='{album_id}'"
-        ).fetchall()
+        get = db.session.query(Cancion).filter(Cancion.album_id == album_id)
         if get:
             resultado = []
             for row in get:
                 resultado.append({
-                    'id': row[0],
-                    'album_id': row[1],
-                    'name': row[2],
-                    'duration': row[3],
-                    'times_played': row[4],
-                    'artist': row[5],
-                    'album': row[6],
-                    'self': row[7]
+                    'id': row.id,
+                    'album_id': row.album_id,
+                    'name': row.name,
+                    'duration': row.duration,
+                    'times_played': row.times_played,
+                    'artist': row.artist,
+                    'album': row.album,
+                    'self': row.self_
                 })
             
             resp = jsonify(resultado)
@@ -155,25 +145,21 @@ def albums_albumId_tracks(album_id):
         return resp
 
    
-
+# TODO: No está eliminando en cascada
 @albumnes.route('/albums/<string:album_id>', methods=['GET', 'DELETE'])
 def albums_artistId(album_id):
     if request.method == 'GET':
-        # Intenta crear el objeto
-        db = get_db()
         # Se crea la query
-        row = db.execute(
-            f"SELECT * FROM Album WHERE id='{album_id}'"
-        ).fetchone()
+        row = db.session.query(Album).filter(Album.id == album_id).all()
         if row:
             resp = jsonify({
-                'id': row[0],
-                'artist_id': row[1],
-                'name': row[2],
-                'genre': row[3],
-                'artist': row[4],
-                'tracks': row[5],
-                'self': row[6]
+                'id': row[0].id,
+                'artist_id': row[0].artist_id,
+                'name': row[0].name,
+                'genre': row[0].genre,
+                'artist': row[0].artist,
+                'tracks': row[0].tracks,
+                'self': row[0].self_
             })
             resp.status_code = 200
             return resp
@@ -185,20 +171,11 @@ def albums_artistId(album_id):
             return resp
 
     elif request.method == 'DELETE':
-        # Intenta crear el objeto
-        db = get_db()
         # Se crea la query
-        row = db.execute(
-            f"SELECT * FROM Album WHERE id='{album_id}'"
-        ).fetchone()
-        if row:
-            pragma = db.execute(
-                'PRAGMA foreign_keys = ON;'
-            )
-            row = db.execute(
-                f"DELETE FROM Album WHERE id='{album_id}'"
-            )
-            db.commit()
+        result = db.session.query(Album).filter(Album.id == album_id).all()
+        if result:
+            db.session.delete(result[0])
+            db.session.commit()
             resp = jsonify({
                 'description': 'Album eliminado.'
             })

@@ -3,12 +3,14 @@ from werkzeug.exceptions import abort
 from base64 import b64encode
 import sqlite3
 import json
+import os
 
+from Tarea2.extensions import db
+from sqlalchemy import text
+from Tarea2.models import *
 
 canciones = Blueprint('canciones', __name__)
 
-def get_db():
-    pass
 
 def codificar_id(name):
     encoded = b64encode(name.encode()).decode('utf-8')
@@ -18,27 +20,22 @@ def codificar_id(name):
 @canciones.route('/tracks', methods=['GET'])
 def tracks():
     if request.method == 'GET':
-        # Intenta crear el objeto
-        db = get_db()
-
         # Se guardan los resultados
         resultado = []
         
         # Se crea la consulta
-        get = db.execute(
-            'SELECT * FROM Cancion'
-        )
+        get = db.session.query(Cancion)
 
-        for row in get.fetchall():
+        for row in get.all():
             resultado.append({
-                'id': row[0],
-                'album_id': row[1],
-                'name': row[2],
-                'duration': row[3],
-                'times_played': row[4],
-                'artist': row[5],
-                'album': row[6],
-                'self': row[7]
+                'id': row.id,
+                'album_id': row.album_id,
+                'name': row.name,
+                'duration': row.duration,
+                'times_played': row.times_played,
+                'artist': row.artist,
+                'album': row.album,
+                'self': row.self_
             })
         
         resp = jsonify(resultado)
@@ -53,25 +50,23 @@ def tracks():
         resp.status_code = 405
         return resp
 
-@canciones.route('/tracks/<string:track_id>', methods=['GET'])
+
+@canciones.route('/tracks/<string:track_id>', methods=['GET', 'DELETE'])
 def tracks_trackId(track_id):
     if request.method == 'GET':
-         # Intenta crear el objeto
-        db = get_db()
         # Se crea la query
-        row = db.execute(
-            f"SELECT * FROM Cancion WHERE id='{track_id}'"
-        ).fetchone()
+        row = db.session.query(Cancion).filter(Cancion.id == track_id).all()[0]
+
         if row:
             resp = jsonify({
-                'id': row[0],
-                'album_id': row[1],
-                'name': row[2],
-                'duration': row[3],
-                'times_played': row[4],
-                'artist': row[5],
-                'album': row[6],
-                'self': row[7]
+                'id': row.id,
+                'album_id': row.album_id,
+                'name': row.name,
+                'duration': row.duration,
+                'times_played': row.times_played,
+                'artist': row.artist,
+                'album': row.album,
+                'self': row.self_
             })
             resp.status_code = 200
             return resp
@@ -82,21 +77,15 @@ def tracks_trackId(track_id):
             resp.status_code = 404
             return resp
     
+    
     elif request.method == 'DELETE':
-        # Intenta crear el objeto
-        db = get_db()
         # Se crea la query
-        row = db.execute(
-            f"SELECT * FROM Cancion WHERE id='{track_id}'"
-        ).fetchone()
-        if row:
-            pragma = db.execute(
-                'PRAGMA foreign_keys = ON;'
-            )
-            row = db.execute(
-                f"DELETE FROM Cancion WHERE id='{track_id}'"
-            )
-            db.commit()
+        result = db.session.query(Cancion).filter(Cancion.id == track_id).all()
+
+        if result:
+            db.session.delete(result[0])
+            db.session.commit()
+            
             resp = jsonify({
                 'description': 'Cancion eliminada.'
             })

@@ -28,6 +28,15 @@ class Album(db.Model):
     tracks = db.Column("tracks", db.Text)
     self_ = db.Column("self", db.Text)
 
+    def __init__(self, id, artist_id, name, genre, artist, tracks, self_):
+        self.id = id
+        self.artist_id = artist_id
+        self.name = name
+        self.genre = genre
+        self.artist = artist
+        self.tracks = tracks
+        self.self_ = self_
+
 
 class Cancion(db.Model):
     id = db.Column("id", db.Text, primary_key=True)
@@ -38,4 +47,15 @@ class Cancion(db.Model):
     artist = db.Column("artist", db.Text)
     album = db.Column("album", db.Text)
     self_ = db.Column("self", db.Text)
+
+    def __init__(self, id, album_id, name, duration, times_played, artist, album, self_):
+        self.id = id
+        self.album_id = album_id
+        self.name = name
+        self.duration = duration
+        self.times_played = times_played
+        self.artist = artist
+        self.album = album
+        self.self_ = self_
+        
     
