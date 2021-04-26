@@ -14,7 +14,7 @@ artistas = Blueprint('artistas', __name__)
 
 def codificar_id(name):
     encoded = b64encode(name.encode()).decode('utf-8')
-    return encoded
+    return encoded[:22]
 
 
 @artistas.route('/artists', methods=['GET', 'POST'])

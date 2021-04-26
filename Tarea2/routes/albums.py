@@ -14,7 +14,7 @@ albumnes = Blueprint('albumnes', __name__)
 
 def codificar_id(name):
     encoded = b64encode(name.encode()).decode('utf-8')
-    return encoded
+    return encoded[:22]
 
 
 @albumnes.route('/albums', methods=['GET'])
