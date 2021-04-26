@@ -108,26 +108,25 @@ def artist_artistId_albums(artist_id):
         else:
             name = valores["name"]
             genre = valores["genre"]
-        
-        # Body Request
-        id_ = b64encode(name.encode()).decode('utf-8')[:22]
-        artist_url = f'{os.environ.get("HEROKU_URL")}artists/{artist_id}'
-        tracks_url = f'{os.environ.get("HEROKU_URL")}albums/{id_}/tracks'
-        self_ = f'{os.environ.get("HEROKU_URL")}albums/{id_}'
-        # response
-        resp = jsonify({
-            'name': name,
-            'genre': genre,
-            'artist': artist_url,
-            'tracks': tracks_url,
-            'self': self_
-        })
-       
+    
         # Comrprobar que el artista existe para crear un album
         query = db.session.query(Artista).filter(Artista.id == artist_id).all()
         query2 = db.session.query(Album).filter(Album.id == id_).all()
 
         if query:
+            #Body Request
+            id_ = b64encode(f"{name}:{query[0].id}".encode()).decode('utf-8')[:22]
+            artist_url = f'{os.environ.get("HEROKU_URL")}artists/{artist_id}'
+            tracks_url = f'{os.environ.get("HEROKU_URL")}albums/{id_}/tracks'
+            self_ = f'{os.environ.get("HEROKU_URL")}albums/{id_}'
+            # response
+            resp = jsonify({
+                'name': name,
+                'genre': genre,
+                'artist': artist_url,
+                'tracks': tracks_url,
+                'self': self_
+            })
             if len(query2) != 0:
                 # Significa que ya existe en BD el album
                 resp.status_code = 409
@@ -143,6 +142,7 @@ def artist_artistId_albums(artist_id):
                 return resp
         else:
             # Significa que no existe el artista previo
+            resp = jsonify({})
             resp.status_code = 422
             return resp
 
