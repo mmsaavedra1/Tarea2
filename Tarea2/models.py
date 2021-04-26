@@ -23,7 +23,7 @@ class Album(db.Model):
     id = db.Column("id", db.Text, primary_key=True)
     artist_id = db.Column("artist_id", db.Text, db.ForeignKey('artista.id', ondelete='CASCADE'), nullable=False,)
     name = db.Column("name", db.Text)
-    genre = db.Column("genre", db.Integer)
+    genre = db.Column("genre", db.Text)
     artist = db.Column("artist", db.Text)
     tracks = db.Column("tracks", db.Text)
     self_ = db.Column("self", db.Text)
