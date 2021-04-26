@@ -13,8 +13,8 @@ artistas = Blueprint('artistas', __name__)
 
 
 def codificar_id(name):
-    encoded = b64encode(name.encode()).decode('utf-8')
-    return encoded[:22]
+    encoded = b64encode(name.encode()).decode('utf-8')[:22]
+    return encoded
 
 
 @artistas.route('/artists', methods=['GET', 'POST'])
