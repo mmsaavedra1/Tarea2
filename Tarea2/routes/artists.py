@@ -137,7 +137,7 @@ def artist_artistId_albums(artist_id):
                 resp.status_code = 409
                 return resp
             else:
-                album = Album(id_, query[0].id, name, genre, artist_url, tracks_url, self_)
+                album = Album(id_, artist_id, name, genre, artist_url, tracks_url, self_)
                 db.session.add(album)
                 db.session.commit()
                 # Significa que retorno con exito
@@ -150,7 +150,7 @@ def artist_artistId_albums(artist_id):
 
     elif request.method == 'GET':
         # Se crea la query
-        get = db.session.query(Album).filter(artist_id == artist_id).all()
+        get = db.session.query(Album).filter(Album.artist_id == artist_id).all()
         if get:
             resultado = []
             for row in get:

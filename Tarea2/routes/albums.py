@@ -103,6 +103,7 @@ def albums_albumId_tracks(album_id):
                 return resp
         else:
             # Significa que no existe el album
+            resp = jsonify({})
             resp.status_code = 422
             return resp
     
