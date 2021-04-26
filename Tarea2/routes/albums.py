@@ -12,11 +12,6 @@ from Tarea2.models import *
 albumnes = Blueprint('albumnes', __name__)
 
 
-def codificar_id(name):
-    encoded = b64encode(name.encode()).decode('utf-8')[:22]
-    return encoded
-
-
 @albumnes.route('/albums', methods=['GET'])
 def albums():
     if request.method == 'GET':
@@ -73,7 +68,7 @@ def albums_albumId_tracks(album_id):
         
         if query:
             # Body request
-            id_ = b64encode(name.encode()).decode('utf-8')
+            id_ = b64encode(name.encode()).decode('utf-8')[:22]
             artist_url = f'{os.environ.get("HEROKU_URL")}artists/{query[0].id}'
             album_url = f'{os.environ.get("HEROKU_URL")}albums/{album_id}'
             self_ = f'{os.environ.get("HEROKU_URL")}tracks/{id_}'

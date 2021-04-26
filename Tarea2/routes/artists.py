@@ -12,9 +12,7 @@ from Tarea2.models import *
 artistas = Blueprint('artistas', __name__)
 
 
-def codificar_id(name):
-    encoded = b64encode(name.encode()).decode('utf-8')[:22]
-    return encoded
+
 
 
 @artistas.route('/artists', methods=['GET', 'POST'])
@@ -36,7 +34,7 @@ def artists():
 
         # Si esta bien hecho continua aca
         # params
-        id_ = b64encode(name.encode()).decode('utf-8')
+        id_ = b64encode(name.encode()).decode('utf-8')[:22]
         albums_url = f'{os.environ.get("HEROKU_URL")}artists/{id_}/albums'
         tracks_url = f'{os.environ.get("HEROKU_URL")}artists/{id_}/tracks'
         self_ = f'{os.environ.get("HEROKU_URL")}artists/{id_}'
@@ -114,7 +112,7 @@ def artist_artistId_albums(artist_id):
             genre = valores["genre"]
         
         # Body Request
-        id_ = b64encode(name.encode()).decode('utf-8')
+        id_ = b64encode(name.encode()).decode('utf-8')[:22]
         artist_url = f'{os.environ.get("HEROKU_URL")}artists/{artist_id}'
         tracks_url = f'{os.environ.get("HEROKU_URL")}albums/{id_}/tracks'
         self_ = f'{os.environ.get("HEROKU_URL")}albums/{id_}'

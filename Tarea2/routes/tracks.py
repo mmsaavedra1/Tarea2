@@ -1,6 +1,5 @@
 from flask import (Flask, g, request, Blueprint, jsonify)
 from werkzeug.exceptions import abort
-from base64 import b64encode
 import sqlite3
 import json
 import os
@@ -11,10 +10,6 @@ from Tarea2.models import *
 
 canciones = Blueprint('canciones', __name__)
 
-
-def codificar_id(name):
-    encoded = b64encode(name.encode()).decode('utf-8')[:22]
-    return encoded
 
 
 @canciones.route('/tracks', methods=['GET'])
