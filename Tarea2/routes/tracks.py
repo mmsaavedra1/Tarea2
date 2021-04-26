@@ -55,18 +55,18 @@ def tracks():
 def tracks_trackId(track_id):
     if request.method == 'GET':
         # Se crea la query
-        row = db.session.query(Cancion).filter(Cancion.id == track_id).all()[0]
+        row = db.session.query(Cancion).filter(Cancion.id == track_id).all()
 
         if row:
             resp = jsonify({
-                'id': row.id,
-                'album_id': row.album_id,
-                'name': row.name,
-                'duration': row.duration,
-                'times_played': row.times_played,
-                'artist': row.artist,
-                'album': row.album,
-                'self': row.self_
+                'id': row[0].id,
+                'album_id': row[0].album_id,
+                'name': row[0].name,
+                'duration': row[0].duration,
+                'times_played': row[0].times_played,
+                'artist': row[0].artist,
+                'album': row[0].album,
+                'self': row[0].self_
             })
             resp.status_code = 200
             return resp
@@ -77,7 +77,7 @@ def tracks_trackId(track_id):
             resp.status_code = 404
             return resp
     
-    
+
     elif request.method == 'DELETE':
         # Se crea la query
         result = db.session.query(Cancion).filter(Cancion.id == track_id).all()

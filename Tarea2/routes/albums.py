@@ -68,13 +68,12 @@ def albums_albumId_tracks(album_id):
             duration = valores["duration"]
         
         # Si está bien hecho continua aca
-        query = db.session.query(Album).filter(Album.id == album_id)
+        query = db.session.query(Album).filter(Album.id == album_id).all()
         if query:
             try:
                 # params
                 id_ = b64encode(name.encode()).decode('utf-8')[:22]
-                query_artist_id = db.session.query(Album).filter(Album.id == album_id).all()[0]
-                artist_url = f'{os.environ.get("HEROKU_URL")}artists/{query_artist_id.id}'
+                artist_url = f'{os.environ.get("HEROKU_URL")}artists/{query[0].id}'
                 album_url = f'{os.environ.get("HEROKU_URL")}albums/{album_id}'
                 self_ = f'{os.environ.get("HEROKU_URL")}tracks/{id_}'
                 # response
@@ -103,8 +102,7 @@ def albums_albumId_tracks(album_id):
                 return resp
         else:
             resp = jsonify({
-                'error': 'Album no existente.',
-                'query': query
+                'error': 'Album no existente.'
             })
             resp.status_code = 422
             return resp

@@ -117,7 +117,7 @@ def artist_artistId_albums(artist_id):
         # Comrprobar que el artista existe para crear un album
         query = db.session.query(Artista).filter(Artista.id == artist_id).all()
         
-        if len(query) != 0:
+        if query:
             try:
                 # params
                 id_ = b64encode(name.encode()).decode('utf-8')[:22]
@@ -252,7 +252,7 @@ def artist_artistId(artist_id):
 
     elif request.method == 'DELETE':
         # Se crea la query
-        row = db.session.query(Artista).filter(Artista.id == artist_id)
+        row = db.session.query(Artista).filter(Artista.id == artist_id).all()
         if row:
             db.session.delete(row[0])   
             db.session.commit()
