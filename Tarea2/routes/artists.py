@@ -13,8 +13,6 @@ artistas = Blueprint('artistas', __name__)
 
 
 
-
-
 @artistas.route('/artists', methods=['GET', 'POST'])
 def artists():
     if request.method ==  'POST':
@@ -130,14 +128,16 @@ def artist_artistId_albums(artist_id):
         query2 = db.session.query(Album).filter(Album.id == id_).all()
 
         if query:
-            if query2:
+            if len(query2) != 0:
                 # Significa que ya existe en BD el album
                 resp.status_code = 409
                 return resp
             else:
+                print("Entre")
                 album = Album(id_, artist_id, name, genre, artist_url, tracks_url, self_)
                 db.session.add(album)
                 db.session.commit()
+                resp['Guarde el id'] = id_
                 # Significa que retorno con exito
                 resp.status_code = 201
                 return resp
