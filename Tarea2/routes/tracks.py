@@ -14,7 +14,7 @@ canciones = Blueprint('canciones', __name__)
 
 def codificar_id(name):
     encoded = b64encode(name.encode()).decode('utf-8')
-    return encoded[:22]
+    return encoded
 
 
 @canciones.route('/tracks', methods=['GET'])
