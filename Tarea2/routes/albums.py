@@ -187,16 +187,28 @@ def albums_artistId(album_id):
         resp.status_code = 405
         return resp
     
-"""
+
 @albumnes.route('/albums/<string:album_id>/tracks/play')
 def albums_albumId_tracks_play(album_id):
-    if request.method == 'POST':
-        pass
-        #TODO
+     if request.method == 'POST':
+        albums = db.session.query(Album).filter(Album.id == album_id).all()
+        if albums:
+            for album in albums:
+                tracks = db.session.query(Cancion).filter(Cancion.album_id == album_id).all()
+                if tracks:
+                    for track in tracks:
+                        value = track.times_played + 1
+                        setattr(track, times_played, value)
+                        db.session.commit()
+                        
+            # Retorna exito
+            resp.status_code = 200
+        else:
+            # Retorna que no existe el id de la URL
+            resp.status_code = 404
     else:
         resp = jsonify({
                 'error': 'Metodo HTTP inexistente.'
             })
         resp.status_code = 405
         return resp
-"""

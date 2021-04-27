@@ -104,8 +104,17 @@ def tracks_trackId(track_id):
 @canciones.route('/tracks/<string:track_id>/play')
 def tracks_trackId_play(track_id):
     if request.method == 'POST':
-        pass
-        #TODO
+        tracks = db.session.query(Cancion).filter(Cancion.id == track_id).all()
+        if tracks:
+            for track in tracks:
+                value = track.times_played + 1
+                setattr(track, times_played, value)
+                db.session.commit()
+            # Retorna exito
+            resp.status_code = 200
+        else:
+            # Retorna que no existe el id de la URL
+            resp.status_code = 404
     else:
         resp = jsonify({
                 'error': 'Metodo HTTP inexistente.'
