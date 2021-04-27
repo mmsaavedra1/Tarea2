@@ -269,7 +269,7 @@ def artist_artistId(artist_id):
 # 200 (OK), 404 (Not found)
 @artistas.route('/artists/<string:artist_id>/albums/play', methods=['PUT'])
 def artist_artistId_albums_play(artist_id):
-    if request.method == 'POST':
+    if request.method == 'PUT':
         resp = jsonify({})
         artist = db.session.query(Artista).filter(Artista.id == artist_id).all()
         # Si existe el artista se prosigue
