@@ -190,7 +190,7 @@ def albums_artistId(album_id):
 
 @albumnes.route('/albums/<string:album_id>/tracks/play')
 def albums_albumId_tracks_play(album_id):
-     if request.method == 'POST':
+    if request.method == 'POST':
         resp = jsonify({})
         albums = db.session.query(Album).filter(Album.id == album_id).all()
         if albums:
