@@ -284,6 +284,7 @@ def artist_artistId_albums_play(artist_id):
                             value = track.times_played + 1
                             setattr(track, times_played, value)
                             db.session.commit()
+                            
             # Retorna exito
             resp.status_code = 200
         else:
