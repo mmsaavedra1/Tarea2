@@ -111,14 +111,15 @@ def artist_artistId_albums(artist_id):
     
         # Comrprobar que el artista existe para crear un album
         query = db.session.query(Artista).filter(Artista.id == artist_id).all()
-        query2 = db.session.query(Album).filter(Album.id == id_).all()
-
+        
         if query:
             #Body Request
             id_ = b64encode(f"{name}:{query[0].id}".encode()).decode('utf-8')[:22]
             artist_url = f'{os.environ.get("HEROKU_URL")}artists/{artist_id}'
             tracks_url = f'{os.environ.get("HEROKU_URL")}albums/{id_}/tracks'
             self_ = f'{os.environ.get("HEROKU_URL")}albums/{id_}'
+
+            query2 = db.session.query(Album).filter(Album.id == id_).all()
             # response
             resp = jsonify({
                 'name': name,
@@ -132,11 +133,9 @@ def artist_artistId_albums(artist_id):
                 resp.status_code = 409
                 return resp
             else:
-                print("Entre")
                 album = Album(id_, artist_id, name, genre, artist_url, tracks_url, self_)
                 db.session.add(album)
                 db.session.commit()
-                resp['Guarde el id'] = id_
                 # Significa que retorno con exito
                 resp.status_code = 201
                 return resp
