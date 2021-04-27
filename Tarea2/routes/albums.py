@@ -69,7 +69,7 @@ def albums_albumId_tracks(album_id):
         if query:
             # Body request
             id_ = b64encode(f"{name}:{query[0].id}".encode()).decode('utf-8')[:22]
-            artist_url = f'{os.environ.get("HEROKU_URL")}artists/{query[0].id}'
+            artist_url = f'{os.environ.get("HEROKU_URL")}artists/{query[0].artist_id}'
             album_url = f'{os.environ.get("HEROKU_URL")}albums/{album_id}'
             self_ = f'{os.environ.get("HEROKU_URL")}tracks/{id_}'
             # response
