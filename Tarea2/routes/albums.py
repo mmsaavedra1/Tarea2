@@ -199,7 +199,7 @@ def albums_albumId_tracks_play(album_id):
                 if tracks:
                     for track in tracks:
                         value = track.times_played + 1
-                        setattr(track, times_played, value)
+                        track.times_played = value
                         db.session.commit()
                         
             # Retorna exito
