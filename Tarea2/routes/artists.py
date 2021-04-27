@@ -271,7 +271,7 @@ def artist_artistId(artist_id):
 def artist_artistId_albums_play(artist_id):
     if request.method == 'POST':
         resp = jsonify({})
-        artist = db.session.query(Artista).filter(id == artist_id).all()
+        artist = db.session.query(Artista).filter(Artista.id == artist_id).all()
         # Si existe el artista se prosigue
         if artist:
             albums = db.session.query(Album).filter(Album.artist_id == artist_id).all()
@@ -284,7 +284,7 @@ def artist_artistId_albums_play(artist_id):
                             value = track.times_played + 1
                             setattr(track, times_played, value)
                             db.session.commit()
-                            
+
             # Retorna exito
             resp.status_code = 200
         else:

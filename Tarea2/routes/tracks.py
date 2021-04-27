@@ -104,6 +104,7 @@ def tracks_trackId(track_id):
 @canciones.route('/tracks/<string:track_id>/play')
 def tracks_trackId_play(track_id):
     if request.method == 'POST':
+        resp = jsonify({})
         tracks = db.session.query(Cancion).filter(Cancion.id == track_id).all()
         if tracks:
             for track in tracks:
