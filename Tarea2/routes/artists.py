@@ -266,16 +266,32 @@ def artist_artistId(artist_id):
         resp.status_code = 405
         return resp
         
-"""
+# 200 (OK), 404 (Not found)
 @artistas.route('/artists/<string:artist_id>/albums/play')
 def artist_artistId_albums_play(artist_id):
     if request.method == 'POST':
-        pass
-        #TODO
+        resp = jsonify({})
+        artist = db.session.query(Artista).filter(id == artist_id).all()
+        # Si existe el artista se prosigue
+        if artist:
+            albums = db.session.query(Album).filter(Album.artist_id == artist_id).all()
+            if albums:
+                for album in albums:
+                    album_id = album.id
+                    tracks = db.session.query(Cancion).filter(Cancion.album_id == album_id).all()
+                    if tracks:
+                        for track in tracks:
+                            value = track.times_played + 1
+                            setattr(track, times_played, value)
+                            db.session.commit()
+            # Retorna exito
+            resp.status_code = 200
+        else:
+            # Retorna que no existe el id de la URL
+            resp.status_code = 404
     else:
         resp = jsonify({
                 'error': 'Metodo HTTP inexistente.'
             })
         resp.status_code = 405
         return resp
-"""
