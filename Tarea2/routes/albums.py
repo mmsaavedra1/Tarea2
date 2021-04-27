@@ -188,7 +188,7 @@ def albums_artistId(album_id):
         return resp
     
 
-@albumnes.route('/albums/<string:album_id>/tracks/play')
+@albumnes.route('/albums/<string:album_id>/tracks/play', methods=['PUT'])
 def albums_albumId_tracks_play(album_id):
     if request.method == 'POST':
         resp = jsonify({})

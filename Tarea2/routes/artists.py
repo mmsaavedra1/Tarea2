@@ -267,7 +267,7 @@ def artist_artistId(artist_id):
         return resp
         
 # 200 (OK), 404 (Not found)
-@artistas.route('/artists/<string:artist_id>/albums/play')
+@artistas.route('/artists/<string:artist_id>/albums/play', methods=['PUT'])
 def artist_artistId_albums_play(artist_id):
     if request.method == 'POST':
         resp = jsonify({})
