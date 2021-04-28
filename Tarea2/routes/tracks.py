@@ -113,9 +113,11 @@ def tracks_trackId_play(track_id):
                 db.session.commit()
             # Retorna exito
             resp.status_code = 200
+            return resp
         else:
             # Retorna que no existe el id de la URL
             resp.status_code = 404
+            return resp
     else:
         resp = jsonify({
                 'error': 'Metodo HTTP inexistente.'

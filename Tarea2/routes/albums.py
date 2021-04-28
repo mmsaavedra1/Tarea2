@@ -204,9 +204,11 @@ def albums_albumId_tracks_play(album_id):
                         
             # Retorna exito
             resp.status_code = 200
+            return resp
         else:
             # Retorna que no existe el id de la URL
             resp.status_code = 404
+            return resp
     else:
         resp = jsonify({
                 'error': 'Metodo HTTP inexistente.'
